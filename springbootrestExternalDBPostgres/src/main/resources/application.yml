@@ -1,0 +1,12 @@
+logging.level.org.springframework: "ERROR"
+spring.cloud.config.uri: http://localhost:8888
+
+spring:
+   application:
+      name: "Topics-Courses"
+   main.banner-mode: "off"
+   jpa:
+      properties.hibernate.dialect :  "org.hibernate.dialect.PostgreSQLDialect"
+      hibernate.ddl-auto: update
+      properties.hibernate.jdbc.lob.non_contextual_creation: true
+      profiles:    active:  

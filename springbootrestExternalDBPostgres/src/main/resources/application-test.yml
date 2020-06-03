@@ -1,0 +1,15 @@
+
+logging.level.org.springframework: "ERROR"
+
+spring:
+   main.banner-mode: "off"
+   jpa:
+      properties.hibernate.dialect :  "org.hibernate.dialect.PostgreSQLDialect"
+      hibernate.ddl-auto: update
+      properties.hibernate.jdbc.lob.non_contextual_creation: true
+   datasource:
+      initialization-mode: always
+      platform: postgres
+      url: "jdbc:postgresql://localhost:56937/postgres"
+      username: postgres
+      password: password
