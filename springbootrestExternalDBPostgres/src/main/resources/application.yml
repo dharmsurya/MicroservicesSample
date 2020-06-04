@@ -1,6 +1,9 @@
 logging.level.org.springframework: "ERROR"
 spring.cloud.config.uri: http://localhost:8888
 
+server:
+  port: 8080
+  
 spring:
    application:
       name: "Topics-Courses"

@@ -14,6 +14,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import io.suryacomp.onlinetrainings.model.Topic;
 import io.suryacomp.onlinetrainings.model.Course;
@@ -25,6 +27,7 @@ public class OnlineTrainingsController {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@HystrixCommand(fallbackMethod = "fallbackResponse", commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "20000"),@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")})
 	@RequestMapping("/trainings")
 	public List<Course> getAllTopicCourses() {
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();        
@@ -57,6 +60,13 @@ public class OnlineTrainingsController {
 		return courses;
 	}
 
+	public List<Course> fallbackResponse() {
+		List<Course> courses=new ArrayList<>();
+		courses.add(new Course("Java 8", "Java 8 details", "Java 8 Description","Java"));
+		courses.add(new Course("Spring cloud","Spring Cloud details", "Spring Cloud description","Spring"));
+		
+		return courses;
+	}
 	/*
 	 * public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
 	 * 

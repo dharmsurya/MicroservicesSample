@@ -1,14 +1,16 @@
 package io.suryacomp.springbootquickstart.courses;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
+@Component
 public class CourseService {
 
 	@Autowired
@@ -20,7 +22,7 @@ public class CourseService {
 	 * Topic("Java", "Core Java", "Core Java Desciption"), new Topic("javascript",
 	 * "JavaScript", "Javascript Desciption")));
 	 */
-
+	@Cacheable("CourseList")
 	public List<Course> getAllCourses(String topicId) {
 		List<Course> courses=new ArrayList<>();
 		courseRepo.findByTopicId(topicId)

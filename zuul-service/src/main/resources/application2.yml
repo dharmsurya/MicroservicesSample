@@ -1,0 +1,78 @@
+zuul:
+  #Service will be mapped under the /api URI
+  host:
+      time-to-live: -1
+      connect-timeout-millis: 50000
+      max-per-route-connections: 10000
+      max-total-connections: 5
+      socket-timeout-millis: 60000
+  semaphore:
+      max-semaphores: 500
+  prefix: /api
+  routes:
+    topic-courses:
+      path: /server/**
+      serviceId: TOPICS-COURSES
+    online-trainings:
+      path: /client/**
+      serviceId: ONLINE-TRAININGS
+  ratelimit:
+    enabled: true
+    repository: JPA
+    policy-list:
+      topic-courses:
+        - limit: 1
+          refresh-interval: 60
+          type:
+            - origin
+      online-trainings:
+        - limit: 1
+          refresh-interval: 20
+          type:
+            - origin
+  strip-prefix: true
+
+ #url: http://localhost:8083
+ #ribbon:
+  #  eager-load:
+     # enabled: true   
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+server:
+  port: 8079
+
+spring:
+  application:
+    name: zuul-service
+  main.banner-mode: "off"
+  jpa:
+      properties.hibernate.dialect :  "org.hibernate.dialect.PostgreSQLDialect"
+      hibernate.ddl-auto: update
+      properties.hibernate.jdbc.lob.non_contextual_creation: true
+  datasource:
+      initialization-mode: always
+      platform: postgres
+      url: "jdbc:postgresql://localhost:5432/postgres"
+      username: postgres
+      password: password
+   
+# Increase the Hystrix timeout to 60s (for all)
+hystrix:
+  command:            
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 600000
+          strategy: THREAD
+#hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds= 1000000
+#hystrix.command.default.execution.isolation.strategy= THREAD
+
+ribbon:
+  ReadTimeout: 60000
