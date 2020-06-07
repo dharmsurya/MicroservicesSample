@@ -16,7 +16,21 @@ zuul:
     online-trainings:
       path: /client/**
       serviceId: ONLINE-TRAININGS
-  
+  ratelimit:
+    enabled: true
+    repository: JPA
+    policy-list:
+      topic-courses:
+        - limit: 1
+          refresh-interval: 60000
+          type:
+            - origin
+      online-trainings:
+        - limit: 1
+          refresh-interval: 20000
+          type:
+            - origin
+  strip-prefix: true
 
  #url: http://localhost:8083
  #ribbon:
@@ -37,7 +51,16 @@ spring:
   application:
     name: zuul-service
   main.banner-mode: "off"
-
+  jpa:
+      properties.hibernate.dialect :  "org.hibernate.dialect.PostgreSQLDialect"
+      hibernate.ddl-auto: update
+      properties.hibernate.jdbc.lob.non_contextual_creation: true
+  datasource:
+      initialization-mode: always
+      platform: postgres
+      url: "jdbc:postgresql://localhost:5432/postgres"
+      username: postgres
+      password: password
 # Increase the Hystrix timeout to 60s (for all)
 hystrix:
   command:            
